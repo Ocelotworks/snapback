@@ -1,9 +1,13 @@
-<html>
-<body>
-    <form method="POST" action="getsnaps.php">
-        <input type="text" name="username" placeholder="Username">
-        <input type="password" name="password" placeholder="Password">
-        <input type="submit">
-    </form>
-</body>
-</html>
+<?php
+/*
+if(isset($_COOKIE['username']) && isset($_COOKIE['password']))
+{
+    header('Location: home.php');
+}
+else
+{
+    header('Location: login.php');
+}
+*/
+header('Location: login.php');
+?>
