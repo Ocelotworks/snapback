@@ -1,3 +1,14 @@
+<?php
+if($_GET['logout'])
+{
+    session_unset();
+    session_destroy();
+    session_start();
+    $_SESSION['logout'] = "true";
+    header("Location: login.php");
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,9 +21,6 @@
     <link href="css/bootstrap.css" rel="stylesheet">
     <style type="text/css">
         /* Override some defaults */
-        html, body {
-            background-color: #eee;
-        }
         body {
             padding-top: 40px;
         }
@@ -46,7 +54,8 @@
     </style>
 
 </head>
-<body>
+<body style="background-color: black">
+<center><img src="snapback.png" style="width: 50%"/></center><br>
 <div class="container">
     <div class="content">
         <div class="row">
@@ -60,22 +69,8 @@
                         <div class="clearfix">
                             <input type="password" name="password" placeholder="Password">
                         </div>
-                        <!--
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" name="remember">Remember me
-                            </label>
-                        </div>
-                        -->
-                        <div class="dropdown">
-                            <label>View Data Type</label>
-                            <select name="dataType">
-                                <option value="snaps.php" selected="true">Unopened Snaps</option>
-                                <option value="stories.php">Stories</option>
-                            </select>
-                        </div>
 
-                        <button class="btn primary" type="submit">Sign in</button>
+                        <button class="btn" type="submit">Sign in</button>
                     </fieldset>
                 </form>
             </div>
@@ -83,4 +78,9 @@
     </div>
 </div> <!-- /container -->
 </body>
+<center>
+    <footer>
+        <small>© Copyright 2014, Ocelotworks</small>
+    </footer>
+</center>
 </html>

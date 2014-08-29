@@ -4,25 +4,50 @@ require_once("snapchat.php");
 session_start();
 $_POST = $_SESSION;
 
+if(!$_SESSION['username'] || $_SESSION['logout'])
+{
+    header("Location: login.php");
+}
+
 $snapchat = new Snapchat($_POST['username'], $_POST['password']);
 $stories = $snapchat->getFriendStories();
 
-//echo '<pre>';
-//echo print_r($stories, 1);
-//echo '</pre>';
+//echo '<pre>' . print_r($stories, 1) . '</pre>';
 
 error_reporting(0);
-$storyHTML = "<div class=\"col-lg-4 col-sm-6 col-xs-12\">";
+$storyHTML = "";
+$userHeader = "";
+$storyNames = array();
+
 foreach($stories as $story)
 {
     $story = get_object_vars($story);
-    $data = $snapchat->getStory($story['media_id'], $story['media_key'], $story['media_iv']);
-    $img = imagecreatefromstring($data);
-    if($img)
+
+    if(!array_key_exists($story['username'], $storyNames))
     {
-        $b64 = base64_encode($data); // Get what we've just outputted and base64 it
-        $storyHTML .= "<img src=\"data:image/png;base64,$b64\" class=\"thumbnail img-responsive\"/></div><div class=\"col-lg-4 col-sm-6 col-xs-12\">";
+        $storyNames[$story['username']] = $story['username'];
     }
+}
+
+foreach($storyNames as $name)
+{
+    $storyHTML .= "<div class=\"row\"><h3 style='color: white'>$name</h3>";
+    foreach($stories as $story)
+    {
+        $story = get_object_vars($story);
+
+        if($story['username'] == $name)
+        {
+            $data = $snapchat->getStory($story['media_id'], $story['media_key'], $story['media_iv']);
+            $img = imagecreatefromstring($data);
+            if($img)
+            {
+                $b64 = base64_encode($data); // Get what we've just outputted and base64 it
+                $storyHTML .= '<div class="col-xs-3"><img src="data:image/png;base64,'.$b64.'" class="thumbnail img-responsive"></div>';
+            }
+        }
+    }
+    $storyHTML .= '</div>';
 }
 
 error_reporting(E_ALL);
@@ -35,81 +60,33 @@ error_reporting(E_ALL);
     <link href="css/bootstrap.css" rel="stylesheet">
     <title>SnapBack</title>
 </head>
+<style>
+    .nav-pills
+    {
+        margin-top: 4px;
+    }
+</style>
+<body style="background-color: black">
 <div class="container">
-    <h1>SnapBack</h1>
-    <div class="navbar">
-        <div class="navbar-inner">
-            <div class="container">
-                <ul class="nav">
-                    <li class="active"><a href="#">Home</a></li>
-                    <li><a href="snaps.php">Unopened Snaps</a></li>
-                    <li><a href="stories.php">Stories</a></li>
-                </ul>
-            </div>
-        </div>
+    <img src="snapback.png" style="width: 315px"/>
+    <div class="pull-right" style="color: white; margin-top: 10px; margin-right: 2px;">Welcome <?php echo $_POST['username']; ?>
+        <a href="login.php?logout=true"><button class="btn btn-group-sm" style="margin-left: 2px;"><span class="glyphicon glyphicon-log-out"></span> Logout</button></a>
     </div>
-    <div class="row">
-        <div class="col-xs-3">
-            <a href="#" class="thumbnail">
-                <img src="http://placehold.it/350x150" class="img-responsive">
-            </a>
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="collapse navbar-collapse">
+            <ul class="nav nav-pills">
+                <li><a href="home.php"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+                <li><a href="snaps.php"><span class="glyphicon glyphicon-asterisk"></span> Unopened Snaps</a></li>
+                <li class="active"><a href="stories.php"><span class="glyphicon glyphicon-book"></span> Stories</a></li>
+            </ul>
         </div>
-        <div class="col-xs-3">
-            <a href="#" class="thumbnail">
-                <img src="http://placehold.it/350x150" class="img-responsive">
-            </a>
-        </div>
-        <div class="col-xs-3">
-            <a href="#" class="thumbnail">
-                <img src="http://placehold.it/350x150" class="img-responsive">
-            </a>
-        </div>
-        <div class="col-xs-3">
-            <a href="#" class="thumbnail">
-                <img src="http://placehold.it/350x150" class="img-responsive">
-            </a>
-        </div>
-        <div class="col-xs-3">
-            <a href="#" class="thumbnail">
-                <img src="http://placehold.it/350x150" class="img-responsive">
-            </a>
-        </div>
-        <div class="col-xs-3">
-            <a href="#" class="thumbnail">
-                <img src="http://placehold.it/350x150" class="img-responsive">
-            </a>
-        </div>
-        <div class="col-xs-3">
-            <a href="#" class="thumbnail">
-                <img src="http://placehold.it/350x150" class="img-responsive">
-            </a>
-        </div>
-        <div class="col-xs-3">
-            <a href="#" class="thumbnail">
-                <img src="http://placehold.it/350x150" class="img-responsive">
-            </a>
-        </div>
-        <div class="col-xs-3">
-            <a href="#" class="thumbnail">
-                <img src="http://placehold.it/350x150" class="img-responsive">
-            </a>
-        </div>
-        <div class="col-xs-3">
-            <a href="#" class="thumbnail">
-                <img src="http://placehold.it/350x150" class="img-responsive">
-            </a>
-        </div>
-        <div class="col-xs-3">
-            <a href="#" class="thumbnail">
-                <img src="http://placehold.it/350x150" class="img-responsive">
-            </a>
-        </div>
-        <div class="col-xs-3">
-            <a href="#" class="thumbnail">
-                <img src="http://placehold.it/350x150" class="img-responsive">
-            </a>
-        </div>
-    </div>
-        <?php echo $storyHTML; ?>
+    </nav>
+    <?php echo $storyHTML; ?>
 </div>
+</body>
+<center>
+    <footer>
+        <small>© Copyright 2014, Ocelotworks</small>
+    </footer>
+</center>
 </html>

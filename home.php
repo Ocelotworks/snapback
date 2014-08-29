@@ -1,35 +1,17 @@
 <?php
-/*
-if (isset($_POST['username']) && isset($_POST['password']) || isset($_COOKIE['username']) && isset($_COOKIE['password']))
-{
-    if($_POST && isset($_POST['remember']))
-    {
-        // Set cookie to last 1 year
-        setcookie('username', $_POST['username'], time() + 60 * 60 * 24 * 365);
-        setcookie('password', md5($_POST['password']), time() + 60 * 60 * 24 * 365);
+session_start();
 
-    }
-    elseif($_POST || !isset($_POST['remember']))
-    {
-        // Cookie expires when browser closes
-        setcookie('username', $_POST['username'], false);
-        setcookie('password', md5($_POST['password']), false);
-    }
-}
-else
+if(!$_SESSION['logout'] && $_SESSION['username'])
 {
-    header('Location: login.php');
+    $_POST = $_SESSION;
 }
-*/
 
-if($_POST)
+if($_POST['username'])
 {
-    $page = $_POST['dataType'];
     $username = $_POST['username'];
     $password = $_POST['password'];
     session_start();
     $_SESSION = $_POST;
-    header("Location: $page");
 }
 else
 {
@@ -44,18 +26,33 @@ else
     <link href="css/bootstrap.css" rel="stylesheet">
     <title>SnapBack</title>
 </head>
+<style>
+    .nav-pills
+    {
+        margin-top: 4px;
+    }
+</style>
+<body style="background-color: black">
 <div class="container">
-    <h1>SnapBack</h1>
-    <div class="navbar">
-        <div class="navbar-inner">
-            <div class="container">
-                <ul class="nav">
-                    <li class="active"><a href="#">Home</a></li>
-                    <li><a href="snaps.php">Unopened Snaps</a></li>
-                    <li><a href="stories.php">Stories</a></li>
-                </ul>
-            </div>
-        </div>
+    <img src="snapback.png" style="width: 315px"/>
+    <div class="pull-right" style="color: white; margin-top: 10px; margin-right: 2px;">Welcome <?php echo $_POST['username']; ?>
+        <a href="login.php?logout=true"><button class="btn btn-group-sm" style="margin-left: 2px;"><span class="glyphicon glyphicon-log-out"></span> Logout</button></a>
     </div>
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="collapse navbar-collapse">
+            <ul class="nav nav-pills">
+                <li class="active"><a href="home.php"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+                <li><a href="snaps.php"><span class="glyphicon glyphicon-asterisk"></span> Unopened Snaps</a></li>
+                <li><a href="stories.php"><span class="glyphicon glyphicon-book"></span> Stories</a></li>
+            </ul>
+        </div>
+    </nav>
+    <center><img src="instructions.jpg"/></center>
 </div>
+</body>
+<center>
+    <footer>
+        <small>© Copyright 2014, Ocelotworks</small>
+    </footer>
+</center>
 </html>
