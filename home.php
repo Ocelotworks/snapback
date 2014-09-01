@@ -44,6 +44,7 @@ else
                 <li class="active"><a href="home.php"><span class="glyphicon glyphicon-home"></span> Home</a></li>
                 <li><a href="snaps.php"><span class="glyphicon glyphicon-asterisk"></span> Unopened Snaps</a></li>
                 <li><a href="stories.php"><span class="glyphicon glyphicon-book"></span> Stories</a></li>
+                <li><a href="sendsnap.php"><span class="glyphicon glyphicon-send"></span> Send Snap</a></li>
             </ul>
         </div>
     </nav>
