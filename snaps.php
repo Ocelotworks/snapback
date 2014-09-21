@@ -1,15 +1,12 @@
 <?php
 require_once("snapchat.php");
 
-session_start();
-$_POST = $_SESSION;
-
-if(!$_SESSION['username'] || $_SESSION['logout'])
+if(is_null($_COOKIE['username']) || is_null($_COOKIE['password']))
 {
-    header("Location: login.php");
+    header("Location: index.php");
 }
 
-$snapchat = new Snapchat($_POST['username'], $_POST['password']);
+$snapchat = new Snapchat($_COOKIE['username'], $_COOKIE['password']);
 $snapList = $snapchat->getSnaps();
 
 //echo '<pre>' .print_r($snapList, 1) . '</pre>';
@@ -65,15 +62,15 @@ error_reporting(E_ALL);
     <title>SnapBack</title>
 </head>
 <style>
-    .nav-pills
-    {
-        margin-top: 4px;
-    }
+.nav-pills
+{
+    margin-top: 4px;
+}
 </style>
 <body style="background-color: black">
 <div class="container">
     <img src="snapback.png" style="width: 315px"/>
-    <div class="pull-right" style="color: white; margin-top: 10px; margin-right: 2px;">Welcome <?php echo $_POST['username']; ?>
+    <div class="pull-right" style="color: white; margin-top: 10px; margin-right: 2px;">Welcome <?php echo $_COOKIE['username']; ?>
         <a href="login.php?logout=true"><button class="btn btn-group-sm" style="margin-left: 2px;"><span class="glyphicon glyphicon-log-out"></span> Logout</button></a>
     </div>
     <nav class="navbar navbar-default" role="navigation">
