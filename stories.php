@@ -36,7 +36,6 @@ foreach($storyNames as $name)
         if($story['username'] == $name)
         {
             $data = $snapchat->getStory($story['media_id'], $story['media_key'], $story['media_iv']);
-            $img = imagecreatefromstring($data);
             if($img)
             {
                 $b64 = base64_encode($data); // Get what we've just outputted and base64 it
@@ -63,6 +62,28 @@ error_reporting(E_ALL);
         margin-top: 4px;
     }
 </style>
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">boywanders.us</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="topitem"><a href="/"><i class="fa fa-home"></i>  Home</a></li>
+                <li class="minecraft"><a href="/minecraft"><i class="fa fa-cube"></i> Minecraft Server</a></li>
+                <li class="irc"><a href="/kiwiirc"><i class="fa fa-comment-o"></i> IRC Chat</a></li>
+                <li class="snapback active"><a href="/snapback"><i class="fa fa-camera"></i> Snapback</a></li>
+                <li class="blog"><a href="/blog"><i class="fa fa-user"></i> Blog</a></li>
+            </ul>
+        </div>
+    </div>
+</div><br/><br/><br/>
 <body style="background-color: black">
 <div class="container">
     <img src="snapback.png" style="width: 315px"/>
