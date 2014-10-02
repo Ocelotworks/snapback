@@ -6,10 +6,12 @@ if(is_null($_COOKIE['username']) || is_null($_COOKIE['password']))
     header("Location: index.php");
 }
 
-//$snapchat = new Snapchat($_COOKIE['username'], $_COOKIE['password']);
+$snapchat = new Snapchat($_COOKIE['username'], $_COOKIE['password']);
 
-//$friends = $snapchat->getFriends();
+$friends = $snapchat->getFriends();
 //echo "<pre>" . print_r($friends, 1) . "</pre>";
+
+/*
 $friends = array(
     0 => array(
         'can_see_custom_stories' => 1,
@@ -33,30 +35,61 @@ $friends = array(
         'type' => 0
     )
 );
+*/
 
-foreach($friends as $person)
+$nameSelect = "";
+$userList = array();
+sortList($friends);
+
+function sortList($friends)
 {
-    $userList[] = array(
-        'display' => $person['display'],
-        'name' => $person['name']
-    );
+    global $nameSelect, $userList;
+    foreach($friends as $person)
+    {
+        $user = get_object_vars($person);
+        $userList[$user['name']] = array(
+            'display' => $user['display'],
+            'name' => $user['name']
+        );
+    }
+    sort($userList);
+
+    foreach($userList as $name)
+    {
+        $nameSelect .= "<div class='list-group-item' id='friendChildren'>";
+        $nameSelect .= "<input type='submit' id='deleteButton' value='Delete' name='".$name['name']."' class='btn btn-danger' style='margin-right: 7px;' />";
+        $nameSelect .= $name['display'] == "" ? $name['name'] : $name['display'];
+        $nameSelect .= "</div>";
+    }
 }
-sort($userList);
 
-echo "<br/><br/><br/><br/><pre>".print_r($userList, 1)."</pre>";
-
-foreach($userList as $name)
+function search($array, $key, $value)
 {
-    $nameSelect .= "<a href='' class='list-group-item'><input type='submit' value='Delete' name='".$name['name']."' class='btn btn-danger' style='margin-right: 7px' />";
-    $nameSelect .= $name['display'] == "" ? $name['name'] : $name['display'];
-    $nameSelect .= '</a>';
+    $results = array();
+
+    if(is_array($array))
+    {
+        if(isset($array[$key]) && $array[$key] == $value)
+        {
+            $results[] = $array;
+        }
+
+        foreach($array as $subArray)
+        {
+            $results = array_merge($results, search($subArray, $key, $value));
+        }
+    }
+
+    return $results;
 }
 
 if($_POST)
 {
-    echo "<br/><br/><br/><br/><pre>".print_r($_POST, 1)."</pre>";
+    //echo "<br/><br/><br/><br/><pre>".print_r($_POST, 1)."</pre>";
     $key = array_search('Delete', $_POST);
-    echo "<br/><br/><br/><br/><pre>".$userList[$key]['name']."</pre>";
+    //echo "<br/><br/><br/><br/><pre>".$key."</pre>";
+    $snapchat->deleteFriend($key);
+    //$userListKey = search($userList, 'name', $key);
 }
 
 ?>
@@ -66,6 +99,7 @@ if($_POST)
 <head>
     <meta charset="utf-8">
     <link href="css/bootstrap.css" rel="stylesheet" type="text/css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <title>SnapBack</title>
 </head>
 <style>
@@ -115,7 +149,7 @@ if($_POST)
         </div>
     </nav>
     <form action="" method="post">
-        <div class="list-group" style="width: 50%; margin-left: 25%">
+        <div class="list-group" id="friendList" style="margin-left: 33%; width: 33%;">
             <?php echo $nameSelect; ?>
         </div>
     </form>

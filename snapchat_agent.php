@@ -22,6 +22,7 @@ abstract class SnapchatAgent {
 	 *   resource names are different, so they aren't interchangeable).
 	 */
 	const URL = 'https://feelinsonice-hrd.appspot.com/bq';
+    //const URL = 'https://test.suproo.com/bq';
 
 	/*
 	 * The API secret. Used to create access tokens.

@@ -97,6 +97,7 @@ error_reporting(E_ALL);
                 <li><a href="snaps.php"><span class="glyphicon glyphicon-asterisk"></span> Unopened Snaps</a></li>
                 <li class="active"><a href="stories.php"><span class="glyphicon glyphicon-book"></span> Stories</a></li>
                 <li><a href="sendsnap.php"><span class="glyphicon glyphicon-send"></span> Send Snap</a></li>
+                <li><a href="managefriends.php"><span class="glyphicon glyphicon-user"></span> Manage Friends</a></li>
             </ul>
         </div>
     </nav>
