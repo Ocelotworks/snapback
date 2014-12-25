@@ -9,10 +9,10 @@ if(is_null($_COOKIE['username']) || is_null($_COOKIE['password']))
 $snapchat = new Snapchat($_COOKIE['username'], $_COOKIE['password']);
 
 $friends = $snapchat->getFriends();
-//echo "<pre>" . print_r($friends, 1) . "</pre>";
-foreach($friends as $person)
+
+foreach($friends as $user)
 {
-    $user = get_object_vars($person);
+    $user = get_object_vars($user);
     if($user['display'] == "")
     {
         $userList[$user['name']] = $user['name'];
@@ -22,60 +22,52 @@ foreach($friends as $person)
         $userList[$user['name']] = $user['display'];
     }
 }
-sort($userList);
 
-$nameSelect = '<div style="color: white">Recipients: <br>(Use CTRL + Click / Command + Click to select multiple recipients.)</div>';
+$nameSelect = '<div style="color: white">Recipients: <br>(Use CTRL/Command + Click to select multiple recipients.)</div>';
 $nameSelect .= '<select name="targets[]" style="height: 125px; margin-top: 7px; float: left;" multiple>';
 foreach($userList as $name => $display)
 {
-    $nameSelect .= '<option value="'.$name.'">';
+    $nameSelect .= "<option value=\"{$name}\">";
     if($display !== "")
     {
-        $nameSelect .= $display.'</option>';
+        $nameSelect .= "{$display}</option>";
     }
     else
     {
-        $nameSelect .= $name.'</option>';
+        $nameSelect .= "{$name}</option>";
     }
 }
 
-$nameSelect .= '</select><br><div style="color: white; float: none"></div>';
+$nameSelect .= '</select><br/><div style="color: white; float: none"></div>';
 
+//echo "<pre>".print_r($_POST, 1)."</pre>";
+//echo "<pre>".print_r($_FILES, 1)."</pre>";
 
-$allowedExtensions = array("jpeg", "jpg");
-$temp = explode(".", $_FILES["file"]["name"]);
-$extension = end($temp);
-
-if($_FILES['file'])
+if(array_key_exists("file", $_FILES))
 {
-    if((($_FILES["file"]["type"] == "image/jpeg")
-        || ($_FILES["file"]["type"] == "image/jpg"))
-        && in_array($extension, $allowedExtensions))
+    if($_FILES["file"]["error"] > 0)
     {
-        if($_FILES["file"]["error"] > 0)
-        {
-            echo "<pre>";
-            echo "Error: " . $_FILES["file"]["error"] . "<br>";
-            echo "</pre>";
-        }
-        else
-        {
-            /*
-            echo "<pre>";
-            echo "Upload: " . $_FILES["file"]["name"] . "<br>";
-            echo "Type: " . $_FILES["file"]["type"] . "<br>";
-            echo "Size: " . ($_FILES["file"]["size"] / 1024) . " kB<br>";
-            echo "Stored in: " . $_FILES["file"]["tmp_name"];
-            echo "</pre>";
-            */
-            sendFile($_FILES["file"]["tmp_name"], $_POST['targets'], $_POST['time']);
-        }
+        echo "<pre>Error: " . $_FILES["file"]["error"] . "<br></pre>";
     }
     else
     {
-        echo "<pre>";
-        echo "Invalid file";
-        echo "</pre>";
+        $imageInfo = getimagesize($_FILES["file"]["tmp_name"]);
+
+        switch($imageInfo[2])
+        {
+            case IMAGETYPE_PNG  : $convertedRawImage = imagecreatefrompng($_FILES["file"]["tmp_name"]); break;
+            case IMAGETYPE_JPEG : $convertedRawImage = imagecreatefromjpeg($_FILES["file"]["tmp_name"]); break;
+            default : echo "<br/><br/><br/><pre>Invalid File.</pre>";
+        }
+
+        if(isset($convertedRawImage))
+        {
+            $tmpJpeg = tempnam("/tmp", "tempjpeg");
+            $convertedImage = imagejpeg($convertedRawImage, $tmpJpeg, 100);
+
+            sendFile($tmpJpeg, $_POST["targets"], $_POST['time']);
+            unlink($tmpJpeg);
+        }
     }
 }
 
@@ -201,7 +193,7 @@ function sendFile($file, $target, $time)
         <div class="input-group">
                 <span class="input-group-btn">
                     <span class="btn btn-primary btn-file">
-                        Browse&hellip; <input type="file" name="file">
+                        Browse&hellip; <input type="file" name="file" accept=".png,.jpg,.jpeg">
                     </span>
                 </span>
             <input type="text" style="width: 20%; margin-right: 15px;" class="form-control" readonly>
