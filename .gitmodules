@@ -1,0 +1,3 @@
+[submodule "php-snapchat"]
+	path = php-snapchat
+	url = https://github.com/JorgenPhi/php-snapchat
