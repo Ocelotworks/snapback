@@ -1,5 +1,5 @@
 <?php
-require_once("snapchat.php");
+require_once("php-snapchat/src/snapchat.php");
 
 if(is_null($_COOKIE['username']) || is_null($_COOKIE['password']))
 {
@@ -86,7 +86,7 @@ error_reporting(E_ALL);
 </div><br/><br/><br/>
 <body style="background-color: black">
 <div class="container">
-    <img src="snapback.png" style="width: 315px"/>
+    <img src="images/snapback.png" style="width: 315px"/>
     <div class="pull-right" style="color: white; margin-top: 10px; margin-right: 2px;">Welcome <?php echo $_COOKIE['username']; ?>
         <a href="login.php?logout=true"><button class="btn btn-group-sm" style="margin-left: 2px;"><span class="glyphicon glyphicon-log-out"></span> Logout</button></a>
     </div>

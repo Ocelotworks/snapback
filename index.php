@@ -52,7 +52,7 @@ if(!is_null($_COOKIE['username']) && !is_null($_COOKIE['password']))
 
 </head>
 <body style="background-color: black">
-<center><img src="snapback.png" style="width: 50%"/></center><br>
+<center><img src="images/snapback.png" style="width: 50%"/></center><br>
 <div class="container">
     <div class="content">
         <div class="row">

@@ -42,7 +42,7 @@ if(is_null($_COOKIE['username']) || is_null($_COOKIE['password']))
 </div><br/><br/><br/>
 <body style="background-color: black">
 <div class="container">
-    <img src="snapback.png" style="width: 315px"/>
+    <img src="images/snapback.png" style="width: 315px"/>
     <div class="pull-right" style="color: white; margin-top: 10px; margin-right: 2px;">Welcome <?php echo $_COOKIE['username']; ?>
         <a href="login.php?logout=true"><button class="btn btn-group-sm" style="margin-left: 2px;"><span class="glyphicon glyphicon-log-out"></span> Logout</button></a>
     </div>
@@ -57,7 +57,7 @@ if(is_null($_COOKIE['username']) || is_null($_COOKIE['password']))
             </ul>
         </div>
     </nav>
-    <center><img src="instructions.jpg"/></center>
+    <center><img src="images/instructions.jpg"/></center>
 </div>
 <script type="text/javascript">
     var _paq = _paq || [];
