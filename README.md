@@ -2,3 +2,6 @@ snapback
 ========
 
 Web Based Snapchat Viewer
+
+THIS DOES NOT WORK ANYMORE DUE TO SNAPCHAT API CHANGES. WHEN IT IS FIXED, I WILL UPDATE IT
+- Tekno

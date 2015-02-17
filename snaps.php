@@ -6,12 +6,15 @@ if(is_null($_COOKIE['username']) || is_null($_COOKIE['password']))
     header("Location: index.php");
 }
 
+echo '<pre>' .print_r($_COOKIE, 1) . '</pre>';
+
 $snapchat = new Snapchat($_COOKIE['username'], $_COOKIE['password']);
 $snapList = $snapchat->getSnaps();
 
-//echo '<pre>' .print_r($snapList, 1) . '</pre>';
+echo '<pre>' .print_r($snapList, 1) . '</pre>';
+var_dump($snapList);
 
-error_reporting(0);
+error_reporting(E_ALL);
 $snapHTML = '<div class="row">';
 $snapNames = array();
 foreach($snapList as $snap)
